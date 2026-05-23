@@ -1,0 +1,32 @@
+name: Cost Janitor
+
+on:
+  workflow_dispatch:
+
+jobs:
+  janitor-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Dependencies
+        run: |
+          pip install -r janitor/requirements.txt
+
+      - name: Run Janitor Script
+        run: |
+          cd janitor
+          python janitor.py
+
+      - name: Upload Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: orphan-report
+          path: janitor/report.json
