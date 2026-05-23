@@ -20,10 +20,62 @@ provider "aws" {
   s3_use_path_style = true
 
   endpoints {
-    s3 = "http://localhost:4566"
+    s3  = "http://localhost:4566"
+    ec2 = "http://localhost:4566"
   }
 }
 
-resource "aws_s3_bucket" "test" {
+ resource "aws_s3_bucket" "test" {
   bucket = "bhavs-test-bucket"
+
+  tags = {
+   Project     = var.project
+    Environment = var.environment
+    Owner       = "Bhavya"
+    ManagedBy   = "terraform"
+  }
+ }
+
+resource "aws_vpc" "main" {
+  cidr_block = "10.20.0.0/16"
+
+  tags = {
+    Project     = var.project
+    Environment = var.environment
+    Owner       = "Bhavya"
+    ManagedBy   = "terraform"
+  }
+}
+
+resource "aws_security_group" "web_sg" {
+  name   = "web-sg"
+  vpc_id = aws_vpc.main.id
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Project     = var.project
+    Environment = var.environment
+    Owner       = "Bhavya"
+    ManagedBy   = "terraform"
+  }
 }
