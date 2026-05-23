@@ -1,0 +1,8 @@
+[
+    {
+        "resource_type": "EBS_VOLUME",
+        "resource_id": "vol-123456",
+        "reason": "Volume is unattached",
+        "estimated_monthly_savings_usd": 10
+    }
+]
